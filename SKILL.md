@@ -1,6 +1,7 @@
 ---
 name: defense-deck-design
 description: Design system and build rules for the animated HTML thesis-defense deck in docs/defense (1920×1080 stage, dark "ink" / light "paper" themes, click builds, live maps). Use when adding, editing, reviewing or re-creating slides in that deck, building a new talk in the same style (conference version, AAG paper talk, job talk), rendering the deck to PNG/PDF, or answering how the deck's layout, typography, colour, animation or presenter view works.
+license: MIT
 ---
 
 # Defense deck design
