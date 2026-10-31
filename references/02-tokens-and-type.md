@@ -1,7 +1,8 @@
 # 02 · Tokens, type, surfaces
 
-Every value below is read from the live deck (`docs/defense/css/v2.css` unless another file is named).
-Use the tokens, never raw hex, so both themes and the per-slide accent keep working.
+Every value below is read from the reference implementation, the reference deck in `docs/defense`
+(`css/v2.css` unless another file is named). These values are the design system and hold for a talk in
+any field. Use the tokens, never raw hex, so both themes and the per-slide accent keep working.
 
 ## 1. Stage and safe area
 
@@ -11,21 +12,21 @@ Use the tokens, never raw hex, so both themes and the per-slide accent keep work
 | Bleed | `--bx`, `--by` = how far the window extends past 16:9, in stage px (+2) | `engine.js fit()` |
 | Slide padding | `92px 128px 132px` (top, sides, bottom) | `.slide` |
 | Content box | x 128 → 1792 (1664 wide), y 92 → 948 | derived |
-| Anchor slides | `padding-top: 92px` (same), `.rail` margin-top 26 px, so the rail starts 48 px under the title box on slide 14 (on slide 8 it follows the lead and `.plan-ask`) | `.anchor`, `.rail` |
+| Anchor slides | `padding-top: 92px` (same), `.rail` margin-top 26 px: a rail placed straight under the title starts 48 px under the title box (reference deck slide 14); after a lead and `.plan-ask` it follows them (reference deck slide 8) | `.anchor`, `.rail` |
 | Title slide | `padding-left: 140px`, vertically centred (`justify-content: center`) | `v2-slides.css .t-title` |
 
 Fixed furniture inside the stage (all `position: absolute`):
 
 | Element | Position | Type |
 |---|---|---|
-| Section label `.chrome .act` | left 128, top 44 | 600 15px Inter, `letter-spacing .14em`, uppercase, `--tx3`; the act name in `<b>` is 700 and `--acc`; gap 14 |
-| "Usual step" note `.conv` | right 128, top 40 | 500 16px, `--tx2`, `<b>` 650 `--tx`; five 9 px dots (gap 4), `.on` = `--tx` |
+| Section label `.chrome .act` | left 128, top 44 | 600 15px Inter, `letter-spacing .14em`, uppercase, `--tx3`; the section (act) name in `<b>` is 700 and `--acc`; gap 14 |
+| Usual-step note `.conv` | right 128, top 40 | 500 16px, `--tx2`, `<b>` 650 `--tx`; five 9 px dots (gap 4), `.on` = `--tx`. One line: `<b>` states the field's usual step, the rest what this study does instead ("Studies often …, while this one …"); the `.on` dot marks which of five usual steps the slide covers |
 | Formula pin `.fx-pin` | right 128, top 24 | see 05-maps-and-charts §5 |
 | Back chip `.xback` (supplement) | left 600, top 44 | 550 16px, `↩` + mono slide number + "Back to the talk" (or "S6 Back" after an S-to-S jump) |
 | Source line `.src` | left 128, bottom 74, max-width 1300 | 400 15px/1.35, `--tx3` |
 | Photo credit `.credit` | right 128, bottom 74 | 500 13px, `--tx3`, `letter-spacing .02em`; text "Photo: Name / Unsplash" |
 | Supplement links `.xrefs` | right 128, bottom 112, column, right-aligned, gap 6 | 550 16px `--tx2`; `<b>` = 700 14px mono `--tx`; `::after "→"` in `--tx3` |
-| Page number `.pageno` | right 128, bottom 40 | 500 15px `--tx3`, tabular; current number `<b>` 600 `--tx2`; "15 / 22" or "S7 / S25" |
+| Page number `.pageno` | right 128, bottom 40 | 500 15px `--tx3`, tabular; current number `<b>` 600 `--tx2`; e.g. "15 / 22" or "S7 / S25" |
 | Step dots `.stepdots` | right 200, bottom 46 | 5 px dots, gap 6, `--line2`; reached dots `--tx2` |
 | Progress bar `.progress` | bottom edge of the window (bleed included) | 3 px, `--acc`, opacity .75, width animates .6s `--ease`; supplement = full width |
 
@@ -45,37 +46,68 @@ Two themes: `ink` (default, dark) and `paper` (light). `T` toggles; the choice p
 | `--tx2` | `rgba(235,235,245,.66)` | `rgba(29,29,31,.68)` | body text, labels |
 | `--tx3` | `rgba(235,235,245,.40)` | `rgba(29,29,31,.44)` | sources, captions, axis notes, inactive |
 | `--line` | `rgba(255,255,255,.12)` | `rgba(0,0,0,.10)` | hairline rules between rows |
-| `--line2` | `rgba(255,255,255,.22)` | `rgba(0,0,0,.20)` | header rules, rails, tract strokes |
-| `--fill` | `rgba(255,255,255,.06)` | `rgba(0,0,0,.04)` | empty map tracts, neutral matrix cells |
+| `--line2` | `rgba(255,255,255,.22)` | `rgba(0,0,0,.20)` | header rules, rails, outlines of map areas and other data regions |
+| `--fill` | `rgba(255,255,255,.06)` | `rgba(0,0,0,.04)` | empty data regions (map areas without a value), neutral matrix cells |
 | `--fill2` | `rgba(255,255,255,.11)` | `rgba(0,0,0,.07)` | tokens, hover |
 | `--scrim` | `5, 5, 7` | `245, 245, 247` | RGB triple for `rgba(var(--scrim), a)` |
 
-Semantic colours. Each one has one main meaning across the deck. The live deck borrows a few of them
-elsewhere: slide 3's field circles (cyan health geography, amber GIScience, purple GeoAI), `--bd` / `--ok`
-in the slide 5 geocoding drawing and the search-query ZIP, `--ai` for archive snapshots and the "archive
-coverage" rate, `--no` for the archive cutoff line. In new slides give non-semantic emphasis `--tx` or
-`--acc`.
+### Role colours
 
-| Token | ink | paper | Meaning | Text class |
+The six semantic tokens name roles, not topics. Each talk assigns every role it needs to one object and
+keeps that meaning on every slide, figure, legend and supplement page. The token names are the CSS API and
+never change.
+
+| Token | ink | paper | Role | Text class |
 |---|---|---|---|---|
-| `--wf` | `#2f8fff` | `#0071e3` | **my list** (the workflow, built from Google listings); Act I accent | `.c-wf` |
-| `--bd` | `#ff9f0a` | `#c86b00` | **the state list** (Minnesota Board of Pharmacy, the reference); Act II and linkage accent | `.c-bd` |
-| `--sp` | `#40c8e0` | `#0a8aa8` | the map / RQ3 / geography; Prologue-geography, Act III, Epilogue accent | `.c-sp` |
-| `--ai` | `#bf5af2` | `#8944ab` | the language model, GeoAI, "classified by a model" | `.c-ai` |
-| `--ok` | `#30d158` | `#248a3d` | include, match, yes | `.c-ok` |
-| `--no` | `#ff5a52` | `#d70015` | exclude, miss, no, "usual problem" | `.c-no` |
+| `--wf` | `#2f8fff` | `#0071e3` | **source / condition A**: in a comparison, usually the talk's own or the new one | `.c-wf` |
+| `--bd` | `#ff9f0a` | `#c86b00` | **source / condition B**: usually the reference or the comparison | `.c-bd` |
+| `--sp` | `#40c8e0` | `#0a8aa8` | **space / context / setting**: maps, images of the setting, the place or population studied | `.c-sp` |
+| `--ai` | `#bf5af2` | `#8944ab` | **method / model / instrument** | `.c-ai` |
+| `--ok` | `#30d158` | `#248a3d` | **yes / agreement**: include, match, pass | `.c-ok` |
+| `--no` | `#ff5a52` | `#d70015` | **no / error**: exclude, miss, fail, the problem the talk addresses | `.c-no` |
+
+Assigning roles:
+
+- Fix the mapping before the first slide and keep it for the whole talk.
+- A role the talk does not have stays unused. Its colour takes no other meaning.
+- Emphasis that belongs to no role takes `--tx` or `--acc`.
+- A word that names a role object takes the role's text class (`.c-wf`, `.c-bd`, …), and every figure
+  legend uses the same colour for the same object.
+
+| Token | Example (reference deck, a geography thesis) | Example (another field, a diagnostic-test study) |
+|---|---|---|
+| `--wf` | "my list": the workflow's pharmacy list built from Google listings; Act I accent | the new rapid test |
+| `--bd` | "the state list": Minnesota Board of Pharmacy records, the reference; Act II and linkage accent | the laboratory reference test |
+| `--sp` | the map, RQ3, geography; Prologue geography, Act III and Epilogue accent | the clinics and the patients tested |
+| `--ai` | the language model, GeoAI, "classified by a model" | the image-reading algorithm |
+| `--ok` | include, match, yes | the two tests agree |
+| `--no` | exclude, miss, no, "usual problem" | the two tests disagree, failed runs |
+
+Example (reference deck, borrowings not to copy): slide 3's field circles (cyan health geography, amber
+GIScience, purple GeoAI), `--bd` / `--ok` in the slide 5 geocoding drawing and the search-query ZIP, `--ai`
+for archive snapshots and the "archive coverage" rate, `--no` for the archive cutoff line.
 
 Other text classes: `.c-acc` (slide accent), `.c-tx`, `.c-2` (`--tx2`), `.c-3` (`--tx3`).
 Mixed tints are built with `color-mix(in srgb, var(--wf) 22%, transparent)`, never with a new hex.
-Typical mixes: 9 % (target area fill), 13 % (slide 3 field circles; 22 % / 28 % for the RQ2 Venn),
-18 % (water, done-dot halo),
-20–22 % (matrix cell tint), 38 % / 82 % (two-step sequential map ramp on `--sp`).
+Typical mixes: 9 % (fill of a highlighted area or band; reference deck: the target area on the map),
+13 % (overlapping field circles, reference deck slide 3; 22 % / 28 % for a two-set Venn, the reference
+deck's RQ2 Venn), 18 % (water on maps, done-dot halo), 20–22 % (matrix cell tint), 38 % / 82 % (two-step
+sequential ramp on `--sp` for maps).
 
 ### Slide accent `--acc`
 
-`<section data-acc="wf|bd|sp|ai|ok|w">` sets `--acc` (`w` = `--tx`, a neutral slide). The engine copies it
-to the stage on every slide change, so the background glow, the eyebrow, `<em>` in titles, the act label
-and the progress bar all take it. Accent by section in the live deck:
+`<section data-acc="wf|bd|sp|ai|ok|w">` sets `--acc` (`w` = `--tx`, a neutral slide). A slide without
+`data-acc` takes `--wf`, the default on `#stage` and `.slide`; `--no` has no accent value. The engine copies
+the accent to the stage on every slide change, so the background glow, the eyebrow, `<em>` in titles, the
+section label and the progress bar all take it.
+
+Rule: **each section takes the accent of the role it is about.** A section about source A takes `wf`,
+about source B `bd`, about the setting `sp`, about the method `ai`. `w` (neutral) marks two kinds of
+slide: the field's usual practice, as opposed to this study's contribution, and the limitations. A slide
+about a different role than its section takes that role's accent (reference deck: the model's four
+questions inside Act I take `ai`). Supplement slides follow the same rule one by one.
+
+Example (reference deck, a geography thesis):
 
 | Section | Accent |
 |---|---|
@@ -87,6 +119,9 @@ and the progress bar all take it. Accent by section in the live deck:
 | Act III, Epilogue (except Thank you: default `--wf`) | `sp` |
 | Supplement | by subject: evidence `wf`, prompt/GeoAI/practices `ai`, linkage `bd`, RQ3 `sp`, limitations `w` |
 
+Example (another field, a diagnostic-test study): the field's usual practice `w`, the rapid-test section
+`wf`, the laboratory reference `bd`, the clinics and patients `sp`, the reading algorithm `ai`.
+
 ## 3. Background
 
 ```css
@@ -96,8 +131,9 @@ and the progress bar all take it. Accent by section in the live deck:
 [data-theme="paper"] .bg .glow { opacity: .10 }
 ```
 
-The glow is the only colour field in the deck. It changes colour smoothly when the accent changes,
-so moving from Act I to Act II reads as a colour shift from blue to amber.
+The glow is the only colour field in the deck. It changes colour smoothly when the accent changes, so
+moving from a section about source A to a section about source B reads as a colour shift from blue to amber
+(reference deck: Act I to Act II).
 
 ## 4. Photography
 
@@ -108,7 +144,7 @@ Files ship in `img/<id>.jpg` (1920 px wide); the online Unsplash URL is only a f
 |---|---|---|
 | `sl` | left-to-right: .96 → .86 (34 %) → .28 (68 %) → .10 | title, thank-you: text on the left over a photo |
 | `sb` | bottom-up: .97 → .72 (38 %) → .10 (75 %) | text at the bottom |
-| `sf` | flat .55 | hook: photo dimmed under a map |
+| `sf` | flat .55 | hook: photo dimmed under a figure (reference deck: a map) |
 | `sx` | top-down .62 → .86 | anchor slides |
 | `sx blur` | plus `filter: blur(28px) saturate(1.35) brightness(.95)` | anchor slides: the photo becomes a coloured haze |
 | `half` | photo on the right half; an eased 9-stop gradient from solid (x ≈ 1037) to clear (x ≈ 1344) | text-left split |
@@ -116,8 +152,21 @@ Files ship in `img/<id>.jpg` (1920 px wide); the online Unsplash URL is only a f
 
 Every photo slowly zooms (Ken Burns): `kb 18s linear`, scale 1.04 → 1.12, drift −1.2 % / −.8 %.
 Photo filter: `saturate(.9) contrast(1.02)`. Credit sits bottom right; on a right-hand half photo it
-turns white with a text shadow. Photos are people and places (Minneapolis skyline, a pharmacist with a
-patient, a supermarket), never stock graphics or icons.
+turns white with a text shadow.
+
+Photos show the study's setting or subject: the people, places, organisms or instruments the talk is
+about. Never stock graphics or icons. A background photo is atmosphere. An image that carries evidence (a
+specimen, a sample, a scan, an archival page, a work) is a figure, never a `data-photo` background: the
+scrim and the zoom alter it. It carries its furniture: a scale bar on a specimen or sample, a caption with
+holder and rights on a document or work (05 §0, §8).
+
+- Example (reference deck, a geography thesis): the Minneapolis skyline, a pharmacist with a patient, a
+  supermarket.
+- Example (other fields): a field site, the instrument on the bench, the reading room of the archive
+  studied.
+
+The reference engine writes every credit as "Photo: Name / Unsplash" (`engine.js addPhoto()`). Give
+`data-credit` only to Unsplash photos; credit a photo from any other source in the slide's `.src` line.
 
 ## 5. Typefaces
 
@@ -125,7 +174,7 @@ Bundled in `fonts/` (latin + latin-ext subsets, OFL), declared in `css/fonts.css
 
 | Token | Stack | Role |
 |---|---|---|
-| `--f-display` | "Inter Tight", Inter, Segoe UI, system-ui | headlines, big numbers, station names |
+| `--f-display` | "Inter Tight", Inter, Segoe UI, system-ui | headlines, big numbers, rail station names |
 | `--f-sans` | Inter, Segoe UI, system-ui | everything else |
 | `--f-mono` | "JetBrains Mono", Cascadia Mono, Consolas | codes, step numbers, S-numbers, tokens, verbatim strings |
 | math | "STIX Two Text", Cambria Math, serif (normal + italic) | equations, fraction numerals, `=` signs |
@@ -143,7 +192,7 @@ in-between weights (450, 550, 650, 680) because the fonts are variable; 750 rend
 |---|---|---|---|---|---|
 | `.display` | display | 700 · 128/0.95 (title slide 136, set inline to 120; "Thank you." 180) | −.04em | `--tx` (on photos `#fff`, paper `--tx`) | `text-wrap: balance`, mb 28 |
 | `.title` | display | 680 · 64/1.05 | −.028em | `--tx`; `<em>` = `--acc`, upright | max-width 1500, `balance`, mb 22 |
-| `.eyebrow` | sans | 650 · 18/1 | .16em, uppercase | `--acc` | mb 22; pattern "RQ2 · FINDING" |
+| `.eyebrow` | sans | 650 · 18/1 | .16em, uppercase | `--acc` | mb 22; pattern question · slide role, e.g. "RQ2 · FINDING" |
 | `.lead` | sans | 400 · 30/1.42 | — | `--tx2`; `<b>` 600 `--tx` | max-width 1180, `pretty` |
 | `.sub` | sans | 600 · 26/1.3 | −.01em | `--tx` | mb 8 |
 | `p`, `li` | sans | 25/1.48 | — | `--tx2` | `p` mb 14, `pretty` |
@@ -166,13 +215,14 @@ Body text on a talk slide is never below 15 px; 11–13 px is only for photo cre
 Rules that recur:
 
 - Talk-slide title = one sentence that states the finding or the question, ending with a full stop or
-  "?". Usually one phrase in `<em>` carries the accent (the claim word: "the same places", "switching the
-  list", "one pharmacy"). Some supplement titles are plain labels without a full stop.
+  "?". Usually one phrase in `<em>` carries the accent: the claim word. Example (reference deck, a
+  geography thesis): "the same places", "switching the list", "one pharmacy". Example (another field):
+  "half the dose", "the older cohort". Some supplement titles are plain labels without a full stop.
 - Caps labels (eyebrow, section label, axis titles, column heads, `.t-plate .lab`, `.rq`) are mostly
   12–18 px, weight 600–700, tracking .06–.20em (section label 600 15 px .14em; verdict `.s-v` 700 20 px
   .06em). `.stat .lab` is not a caps label: it is a 450 22 px sentence-case label.
 - Emphasis is colour or weight, never a box: `<b>` brightens to `--tx`; `<em>` takes `--acc`;
-  semantic words take `.c-wf` / `.c-bd`.
+  words naming a role object take its class (`.c-wf`, `.c-bd`, …).
 - Fractions in prose use the plain "9/10" glyphs; "½" uses the single glyph.
 
 ## 7. Spacing and grids
@@ -184,7 +234,9 @@ Layout utilities (`v2.css`): `.row` (flex, gap 48) · `.col` · `.g2` (1fr 1fr, 
 Recurring spacing values: 6–10 (label to value), 14–22 (row padding), 22 (eyebrow→title), 32
 (title→`.body`: 22 + 10), 24–44 (column padding beside a vertical hairline: mostly 28, 44 on `.ans`),
 56–72 (column gaps), 112 (two wide columns, `.mw2`).
-Map + text slides use `grid-template-columns: 1fr 680px` (hook: 924 / 680) or `.g-64` (measured 968 / 624); the closing map (slide 21) uses `.g2` (800 / 800).
+Figure + text slides use `grid-template-columns: 1fr 680px` (reference deck hook: 924 / 680) or `.g-64`
+(measured 968 / 624); a closing figure + text slide uses `.g2` (800 / 800). In the reference deck these
+figures are maps; slide 21 is the `.g2` closing map.
 The body starts at y ≈ 298 under a two-line title (≈ 650 px tall) and y ≈ 231 under a one-line title (≈ 717).
 
 ## 8. Surfaces: rules, not boxes
@@ -194,20 +246,22 @@ The deck separates content with:
 1. **Hairlines**: 1 px `--line` between rows (`.fact`, `.why`, `.sx-row`, `.eb-list`, `.bk-tbl`, `.lm`);
    `.fr-list` and `.lmap` rows use 1 px `--line2`; 1 px vertical `--line` between stat columns (`.stats`,
    `.ans`, `.qm-vs`); the title plate uses `rgba(255,255,255,.18)` on the photo (`--line` in paper).
-2. **Header rules**: 2 px `--line2` under column heads (`.lmap .ch-h`), 2 px in the semantic colour under a
-   group head (`.mw-hd`, `.cm-lab`: the slide-5 "Usual problem" / "This thesis" / "Result" rows in `--no` /
-   `--wf` / `--sp`), 2 px `--wf` over the evidence columns (`.evc`), 2 px `--ai` over the model block.
+2. **Header rules**: 2 px `--line2` under column heads (`.lmap .ch-h`); 2 px in the role colour under a
+   group head (`.mw-hd`, `.cm-lab`) or over a column group (`.evc`). Example (reference deck): the slide-5
+   "Usual problem" / "This thesis" / "Result" rows in `--no` / `--wf` / `--sp`, 2 px `--wf` over the
+   evidence columns (`.evc`), 2 px `--ai` over the model block.
 3. **Left rules**: 3 px for a quote (`.quote`, in `--acc`) and a worked example (`.one-addr`, in `--wf`),
-   both on slide 7.
-4. **Top rule for a conclusion**: 2 px `--sp` over the thesis question (`.gq-ask`), 2 px `--acc` over a
+   both on reference deck slide 7.
+4. **Top rule for a conclusion**: 2 px `--sp` over the guiding question (`.gq-ask`; the colour is fixed in
+   `v2-frame2.css`; in the reference deck the guiding question is about places), 2 px `--acc` over a
    verdict (`.fr-end`).
 5. **Whitespace** and alignment to the five-column rail grid.
 
-Filled shapes are reserved for data marks: map tracts, Venn circles, dots, bars, 2×2 matrix cells
+Filled shapes are reserved for data marks: map areas, Venn circles, dots, bars, 2×2 matrix cells
 (`.dx-c`, 92 px tall, radius 16, `--fill` or a 20–22 % semantic tint with a 2.5 px inset ring), score
-chips in the assignment matrix, and mock web-page snippets on S1. Content is not put in a card; the live
-exceptions (the `.frame-box` note on S7 and the `.fx-pin` formula pin) are listed in 08 (item 23) and are
-not to be copied.
+chips in an assignment matrix, and mock-ups of a real interface (reference deck S1: mock web-page
+snippets). Content never goes in a card. The reference deck has two exceptions, the `.frame-box` note on
+S7 and the `.fx-pin` formula pin; they are listed in 08 (item 23) and are not to be copied.
 
 ## 9. Liquid glass (sparingly)
 
@@ -216,8 +270,9 @@ gradient rim (`::before`, masked) + a top-left sheen (`::after`, screen blend); 
 `js/glass.js` upgrades it in Chromium to real refraction: a per-element SVG displacement map (convex bevel,
 `data-lg-bezel`, `data-lg-scale` default 46, `data-lg-blur` default 1.2) with R/G/B offset 1 / 1.07 / 1.15 for
 dispersion. Used only on: the title and thank-you plates (`.t-plate`, `data-lg-scale="40"`), the rail lens
-(`data-lg-scale="54" data-lg-bezel="22"`) and map controls (`.lg-btns`: pill, `--r: 999px`, active button
-inverted `--tx` background). Do not add glass elsewhere.
+(`data-lg-scale="54" data-lg-bezel="22"`) and the controls of an interactive figure (`.lg-btns`: pill,
+`--r: 999px`, active button inverted `--tx` background; reference deck: map controls). Do not add glass
+elsewhere.
 
 ## 10. Icons and marks
 
@@ -226,7 +281,9 @@ inverted `--tx` background). Do not add glass elsewhere.
 history, search, doc, shield, link, pin, map, chart, lock, unlock, user, users, car, walk, bus, calendar,
 filter, cpu, hash, layers, alert, eye, check, x, building, landmark, star, msg, phone, code, sparkle,
 target, ruler, grid, gear, book, box, scale, split, merge, refresh. Icons label nodes in diagrams
-(70 px in the chain, 38 px for the filter, 30 px in the search bar); never decorate a heading with one.
+(reference deck: 70 px in a process chain, 38 px for a filter step, 30 px in a search bar); never decorate
+a heading with one.
 
-Logo: `img/logo.svg` (paper) / `img/logo-dark.svg` (ink), the "Echo" mark (solid disc + offset ring of
-equal radius), 92 px on the title slide, 40 px `.deck-logo.sm` elsewhere.
+Logo: `img/logo.svg` (paper) / `img/logo-dark.svg` (ink), 92 px on the title slide, 40 px `.deck-logo.sm`
+elsewhere. Use the speaker's own mark at those sizes. Example (reference deck): the "Echo" mark (solid disc
++ offset ring of equal radius).
