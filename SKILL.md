@@ -12,9 +12,11 @@ talk: thesis and dissertation defenses, conference talks, job talks, seminars, l
 every new slide looks and behaves like the rest of the system, whatever field the talk comes from.
 
 **Reference implementation.** The system is documented from one finished deck, a geography honors-thesis
-defense kept in the `docs/defense` folder of its project (the deck itself does not ship with this skill):
-22 talk slides and 25 supplement slides on the same stage. The skill was written from its live source
-(engine, 9 stylesheets, 6 slide files, 6 demo files) and from renders of all 132 click states on 2026-10-30.
+defense kept in the `docs/defense` folder of its project: 22 talk slides and 25 supplement slides on the
+same stage. Its content does not ship with this skill; its engine, stylesheets and tools do, as the
+starter deck in `assets/starter-deck/` with a sample talk in place of the thesis. The skill was written
+from the deck's live source (engine, 9 stylesheets, 6 slide files, 6 demo files) and from renders of all
+132 click states on 2026-10-30.
 Paths such as `docs/defense/...`, the slide catalog (07) and the known issues (08) document that
 implementation. Content taken from it appears only in examples labelled "Example (reference deck)". To carry
 the system into another field, start with `references/09-adapting-to-your-field.md`.
@@ -106,10 +108,12 @@ clinic and the instrument.
    the case that opens and closes the talk, the object followed through every method step); the everyday
    name of each key object (01 §3); the section labels and rail stations; the meaning of each semantic
    colour role and the accent of each section (`references/02-tokens-and-type.md` §2).
-5. **Build on the reference implementation** (`references/06-engine-and-tooling.md` §1): keep its tokens,
-   class names, type scale, motion values and engine behaviour; set the section labels in
-   `engine.js SECTIONS` (06 §2); replace the slide files, demos, data files and photos with your own.
-   Without its source, re-create those files from 02–06 with every value as documented.
+5. **Start from the starter deck** in `assets/starter-deck/`: a copy of the reference implementation's engine,
+   CSS and tools with a 12-slide sample talk of synthetic content (its `README.md` lists what to replace).
+   Copy the folder, start `tools/serve.py`, then keep its tokens, class names, type scale, motion values and
+   engine behaviour; set the section labels in `engine.js SECTIONS` (06 §2); replace the slide files, demos,
+   data files and photos with your own. `references/06-engine-and-tooling.md` §1 lists where the starter
+   differs from the reference implementation.
 6. Add each slide with the steps below.
 
 ## How to add or change a slide
@@ -149,6 +153,7 @@ clinic and the instrument.
 | `references/07-slide-catalog.md` | a field-neutral outline for a 20-minute talk (22 slots and a supplement, each with job, pattern, accent role and click plan; how to adapt it; running examples), then the reference deck's 47 slides as that outline in use |
 | `references/08-known-issues.md` | 28 pitfalls any deck on this engine falls into (rendering, cascade, layout, behaviour, semantics, content checks), each with its rule and the reference deck's instance; new slides must not repeat them |
 | `references/09-adapting-to-your-field.md` | carrying the system into another discipline: what stays fixed, what each talk decides (including its colour-role table), figure furniture by figure type, the opening case, three listeners and colour roles for ten field families, figures and adjustments per family, a checklist for a new field |
+| `assets/starter-deck/` | a working deck to copy: the engine, all CSS, the server and render tools, and a sample talk (9 talk slides, 3 supplement slides, synthetic data) that shows the main patterns; its `README.md` says what to replace |
 | `scripts/cdp_render.py`, `pdf_assemble.py`, `pdf_sheets.py` | render every click state through one headless Edge tab, assemble the PDF, make contact sheets |
 
 ## Checklist before calling a slide done

@@ -12,10 +12,11 @@ so it works with any agent that supports that format, for example Claude Code, C
 and Gemini CLI ([full list](https://agentskills.io/clients)). Nothing in it depends on one agent.
 
 The skill was developed on one reference deck, a geography thesis defense, and the second part of its slide
-catalog documents that deck; the deck's source is not in this repository. The skill was written from that
-source (engine, stylesheets, slide and demo files) and from renders of all 132 click states, and two
-independent passes checked it claim by claim against that source. The rules are stated for any field. Content taken from the
-reference deck appears only as labelled examples.
+catalog documents that deck. The skill was written from the deck's source (engine, stylesheets, slide and
+demo files) and from renders of all 132 click states, and two independent passes checked it claim by claim
+against that source. The deck's content is not in this repository; its engine, stylesheets and tools are, as
+the starter deck in `assets/starter-deck/`, with a sample talk in place of the thesis. The rules are stated
+for any field. Content taken from the reference deck appears only as labelled examples.
 
 ## Contents
 
@@ -31,6 +32,7 @@ reference deck appears only as labelled examples.
 | `references/07-slide-catalog.md` | a field-neutral outline for a 20-minute talk (job, pattern, accent role and click plan per slot), then every slide of the reference deck as that outline in use |
 | `references/08-known-issues.md` | pitfalls any deck on this engine falls into, each with the rule that avoids it and the reference deck's instance; new slides must not repeat them |
 | `references/09-adapting-to-your-field.md` | applying the system to a talk in another discipline: what stays fixed, what each talk sets for itself, figure furniture by figure type, choices for ten field families, a checklist |
+| `assets/starter-deck/` | a working deck to copy: engine, CSS, local server and render tools, plus a sample talk with synthetic data (12 slides) that shows the main patterns and is meant to be replaced |
 | `scripts/` | render every click state through one headless Edge tab, assemble a PDF, make contact sheets |
 
 ## Install
@@ -59,15 +61,18 @@ reference files it lists."
 ## Scope
 
 The tokens, type scale, layout patterns, motion values and writing rules apply to a talk in any discipline
-built on the same engine. Each talk assigns its own meanings to the semantic colours and names its own key
-objects; `references/09-adapting-to-your-field.md` covers that step. The engine paths, the slide catalog and
-the known issues document the reference implementation, kept in the `docs/defense` folder of the reference
-deck's project. The render scripts expect a deck server on `127.0.0.1:8765` and Microsoft Edge, and need
-Python with PyMuPDF, Pillow and websockets.
+built on the same engine. To start one, copy `assets/starter-deck/` and run `python tools/serve.py` in the
+copy; its `README.md` lists what to replace. Each talk assigns its own meanings to the semantic colours and
+names its own key objects; `references/09-adapting-to-your-field.md` covers that step. The engine paths, the
+slide catalog and the known issues document the reference implementation, kept in the `docs/defense` folder
+of the reference deck's project. The render scripts expect a deck server on `127.0.0.1:8765` and Microsoft
+Edge, and need Python with PyMuPDF, Pillow and websockets. The starter deck itself needs only a browser and
+Python's standard library.
 
 Slides and speaker material are in English by default. Before writing presenter material, the skill asks
 whether you want a second language and which one.
 
 ## License
 
-[MIT](LICENSE)
+[MIT](LICENSE). The starter deck loads its fonts (Inter, Inter Tight, JetBrains Mono, STIX Two Text) from
+Google Fonts under the SIL Open Font License; its placeholder photos and logo were generated for it.

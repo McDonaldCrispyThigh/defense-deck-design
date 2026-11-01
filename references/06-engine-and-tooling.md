@@ -47,6 +47,21 @@ What a new talk keeps and what it replaces:
 | Pattern CSS | `css/v2-slides.css` `v2-acts.css` `v2-act2.css` `v2-act3.css` `v2-math.css` `v2-frame.css` `v2-frame2.css` | keep: the patterns in 03 use these classes; new rules go to `v2-frame2.css` under a dated comment, scoped to a slide class |
 | Talk content | the contents of the six `slides/v2-*.js`, `js/v2-demos-*.js`, the running examples and rail stations in `js/v2-common.js`, the data files and the `tools/build_*.py` that write them, `js/qa-cheat.js`, `img/`, `js/i18n-<code>.js` | replace with the talk's own |
 
+**The starter deck.** `assets/starter-deck/` in this skill is this implementation ready to copy, with the
+reference deck's content replaced by a sample talk on synthetic data. It keeps the file names, classes and
+engine behaviour documented here, and differs in these ways:
+
+- Its talk content is the sample's: the `SECTIONS` labels, the rail stations and running examples (in a
+  TALK CONTENT block of `js/v2-common.js`), the `FX` rates, the demos (`js/v2-demos-0.js`), and the data
+  files `js/sampledata.js` and `js/mapdata.js`, written by `tools/build_sample_data.py`.
+- `js/v2-common.js` also holds a shared `tswap` demo for title swaps (bind it with `data-demo="… tswap"`).
+- The second language is one setting, `window.DECK_L2` (§7).
+- `Deck.util` has no string-matching ports, and the map data has its own schema (§3).
+- `.ha-num` takes its unit from `data-unit`. The title-slide eyebrow follows the theme (08 #2).
+- `tools/serve.py` is read-only, and `tools/shoot.sh` accepts a relative output folder.
+- It does not include `edit-keywords.html`, `tools/build_review.py`, `js/review.js` or `css/review.css`;
+  keywords are edited in the slide files.
+
 Keep the six slide file names even when the act titles change: `tools/serve.py` lists them in `FILES` and
 treats the last one, `v2-5-supplement.js`, as the supplement; `/api/keywords`, the keyword editor and the
 render scripts read the deck through that list.
@@ -139,7 +154,8 @@ the other demo names (`rmap2`, `ruler`, `fp` …) are the reference deck's, and 
 Utilities on `Deck.util`: `$ $$ el svg tween easeOut easeInOut sleep fmt clamp mulberry32 store` and the
 string-matching ports used by the reference deck's record-linkage demos
 (`ratio tokenSort tokenSortRatio lcsAlign cleanSteps normName parseAddress addressScore`); `sha256` is
-added by `v2-common.js` for the reference deck's fingerprint demo.
+added by `v2-common.js` for the reference deck's fingerprint demo. The starter deck has the first group
+only.
 
 Map helpers (reference implementation, `js/v2-common.js`, reading `window.MAPDATA` from `js/mapdata.js`):
 `Deck.drawMap(svgRoot, {box, pad, water, frames, counties})`, `Deck.mapBox(pad)`,
@@ -148,6 +164,10 @@ miles, a round length near a fifth of the view) from `MAPDATA.metersPerUnit`; ca
 change. The map's legend is `.map-lg` in the markup. Other figures carry their furniture in the demo's SVG
 or the markup: axis titles with units and a legend on plots, a scale bar on images of specimens or
 samples, row and column axis titles on tables (05 §0).
+
+In the starter deck, `MAPDATA` (`js/mapdata.js`) is `{units, metersPerUnit, box, water, areas: [{id, d, …}]}`
+in projected coordinates with north up; `Deck.drawMap(svgRoot, {box, pad, water})` draws each area as a
+`path.tr` and the water above them, and `Deck.mapFurniture` labels the scale bar in `units` (`km` or `mi`).
 
 Running examples: `Deck.hook()` (the opening tract) and `Deck.CUB` (one pharmacy) are the reference deck's
 talk content; a new talk replaces them with its own examples.
@@ -235,6 +255,12 @@ that slide. Either write every cue with an empty second span of the class `KW_IT
 shows nothing in the presenter) or edit keywords in the slide files only. The editor finds a `notes-kw`
 block only at the skeleton's two-space indent (`KW_BLOCK`), and saves only into a slide that has one or
 has the exact line `  <aside class="notes">` (`NOTES_ANCHOR`, no `hidden`) to insert one before.
+
+In the starter deck the code is one setting. `js/i18n-<code>.js` sets `window.DECK_L2 = '<code>'` next to
+its dictionaries and loads after `js/i18n.js` and before `js/engine.js`. The engine then reads the span with
+class `<code>` in each cue and shows it under the English line, and `?lang=<code>` turns on the translated
+view. `tools/serve.py` reads a cue with or without a second span. Nothing else changes when the language
+does. To drop the language, remove that script tag.
 
 The reference deck was built with one second language already wired into these places. To switch it to
 another language, find the current code with `grep -n "qs.get('lang')" js/engine.js`, then replace that

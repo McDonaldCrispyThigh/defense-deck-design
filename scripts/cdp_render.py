@@ -15,7 +15,7 @@ from pathlib import Path
 
 import websockets
 
-PNG = Path(sys.argv[1])
+PNG = Path(sys.argv[1]).resolve()  # absolute: Edge does not resolve a relative --user-data-dir against this cwd
 PNG.mkdir(parents=True, exist_ok=True)
 EDGE = r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 PORT = 9333
@@ -26,7 +26,7 @@ if len(sys.argv) > 2:  # optional subset, e.g. "2/3,3/0"
     states = [x for x in states if f"{x[0]}/{x[1]}" in keep]
 
 CLEAN = """(() => {  // drop anything a browser extension injected; the deck adds only these to <body>
-  const deck = new Set(['viewport', 'overview', 'help', 'blackout', 'toast']);
+  const deck = new Set(['viewport', 'overview', 'help', 'blackout', 'toast', 'glass-defs']);  // glass-defs: js/glass.js filters
   const gone = [];
   [...document.documentElement.children].forEach(e => { if (e !== document.head && e !== document.body) { gone.push(e.tagName); e.remove(); } });
   [...document.body.children].forEach(e => { if (e.tagName !== 'SCRIPT' && !deck.has(e.id) && !e.classList.contains('navhint')) { gone.push(e.tagName + '#' + e.id); e.remove(); } });
@@ -55,6 +55,8 @@ async def main():
                 break
             except Exception:
                 time.sleep(0.5)
+        else:
+            raise SystemExit(f"Edge opened no DevTools page on port {PORT}: check the EDGE path and that nothing else holds the port")
         async with websockets.connect(page["webSocketDebuggerUrl"], max_size=None) as ws:
             seq = 0
 
